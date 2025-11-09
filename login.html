@@ -1,128 +1,161 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login - Kanban PCM Heineken</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Kanban PCM Heineken</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }</style>
 </head>
-<body class="min-h-screen bg-gray-100 flex items-center justify-center font-sans">
-  <div class="w-full max-w-md bg-white rounded-lg shadow p-6">
-    <h1 class="text-2xl font-bold text-green-800 text-center mb-2">Kanban PCM - Heineken</h1>
-    <p class="text-sm text-gray-600 text-center mb-4">Faça login para acessar o sistema</p>
+<body class="antialiased text-gray-900 flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6">
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl font-bold text-green-800">Kanban PCM - Heineken</h2>
+            <p class="text-sm text-gray-600">Faça login para acessar o sistema</p>
+        </div>
 
-    <div class="flex gap-2 mb-4">
-      <button id="tab-login" class="flex-1 py-2 rounded bg-green-600 text-white">Entrar</button>
-      <button id="tab-register" class="flex-1 py-2 rounded bg-gray-100 text-gray-700">Cadastrar</button>
+        <div class="flex space-x-2 mb-6">
+            <button id="tab-login" class="flex-1 px-3 py-2 rounded-md bg-green-600 text-white font-medium">Entrar</button>
+            <button id="tab-register" class="flex-1 px-3 py-2 rounded-md bg-gray-100 text-gray-700 font-medium">Cadastrar</button>
+        </div>
+
+        <!-- Formulário de Login -->
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label class="text-sm text-gray-700">E-mail</label>
+                <input id="login-email" type="email" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+            <div class="relative">
+                <label class="text-sm text-gray-700">Senha</label>
+                <input id="login-password" type="password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10">
+                <button type="button" class="absolute right-2 top-8 text-gray-500 toggle-password" data-target="login-password" aria-label="Mostrar senha">👁️</button>
+            </div>
+            <p id="login-error" class="text-red-500 text-sm"></p>
+            <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700">Entrar</button>
+        </form>
+
+        <!-- Formulário de Cadastro -->
+        <form id="register-form" class="space-y-4 hidden">
+            <div>
+                <label class="text-sm text-gray-700">E-mail</label>
+                <input id="register-email" type="email" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+            <div class="relative">
+                <label class="text-sm text-gray-700">Senha (mín. 6 caracteres)</label>
+                <input id="register-password" type="password" required minlength="6" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10">
+                <button type="button" class="absolute right-2 top-8 text-gray-500 toggle-password" data-target="register-password" aria-label="Mostrar senha">👁️</button>
+            </div>
+            <div class="relative">
+                <label class="text-sm text-gray-700">Confirmar Senha</label>
+                <input id="register-password-confirm" type="password" required minlength="6" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10">
+                <button type="button" class="absolute right-2 top-8 text-gray-500 toggle-password" data-target="register-password-confirm" aria-label="Mostrar senha">👁️</button>
+            </div>
+            <p id="register-error" class="text-red-500 text-sm"></p>
+            <button type="submit" class="w-full px-4 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-700">Cadastrar</button>
+        </form>
+
+        <p id="auth-status" class="mt-4 text-center text-sm text-gray-600"></p>
     </div>
 
-    <form id="login-form" class="space-y-3">
-      <div>
-        <label class="text-sm text-gray-700">E-mail</label>
-        <input id="login-email" type="email" required class="w-full px-3 py-2 border rounded">
-      </div>
-      <div>
-        <label class="text-sm text-gray-700">Senha</label>
-        <input id="login-password" type="password" required class="w-full px-3 py-2 border rounded">
-      </div>
-      <p id="login-error" class="text-red-500 text-sm"></p>
-      <button class="w-full py-2 bg-green-600 text-white rounded">Entrar</button>
-    </form>
+    <script>
+        // Autenticação simples usando localStorage (hash SHA-256)
+        const USERS_KEY = 'kanban_users_v1';
+        const SESSION_KEY = 'kanban_user_v1';
 
-    <form id="register-form" class="space-y-3 hidden">
-      <div>
-        <label class="text-sm text-gray-700">E-mail</label>
-        <input id="register-email" type="email" required class="w-full px-3 py-2 border rounded">
-      </div>
-      <div>
-        <label class="text-sm text-gray-700">Senha (mín. 6)</label>
-        <input id="register-password" type="password" minlength="6" required class="w-full px-3 py-2 border rounded">
-      </div>
-      <p id="register-error" class="text-red-500 text-sm"></p>
-      <button class="w-full py-2 bg-green-600 text-white rounded">Cadastrar</button>
-    </form>
+        async function hashPassword(password) {
+            const enc = new TextEncoder().encode(password);
+            const digest = await crypto.subtle.digest('SHA-256', enc);
+            return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,'0')).join('');
+        }
+        function loadUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY)||'{}'); } catch { return {}; } }
+        function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+        function setSession(email){ localStorage.setItem(SESSION_KEY, email); }
+        function getSession(){ return localStorage.getItem(SESSION_KEY); }
 
-    <p id="auth-status" class="mt-4 text-center text-sm text-gray-600"></p>
-  </div>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const loginEmail = document.getElementById('login-email');
+            const loginPassword = document.getElementById('login-password');
+            const loginError = document.getElementById('login-error');
+            const registerEmail = document.getElementById('register-email');
+            const registerPassword = document.getElementById('register-password');
+            const registerError = document.getElementById('register-error');
+            const authStatus = document.getElementById('auth-status');
 
-  <script>
-    // keys
-    const USERS_KEY = 'kanban_users_v1';
-    const SESSION_KEY = 'kanban_user_v1';
+            if (getSession()) {
+                authStatus.textContent = 'Já autenticado. Redirecionando...';
+                setTimeout(()=> location.href = '/index.html', 400);
+                return;
+            }
 
-    async function hashPassword(password) {
-      const enc = new TextEncoder().encode(password);
-      const digest = await crypto.subtle.digest('SHA-256', enc);
-      return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
-    function loadUsers(){ try { return JSON.parse(localStorage.getItem(USERS_KEY)||'{}'); } catch { return {}; } }
-    function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-    function setSession(email){ localStorage.setItem(SESSION_KEY, email); }
-    function getSession(){ return localStorage.getItem(SESSION_KEY); }
+            tabLogin.addEventListener('click', () => {
+                tabLogin.classList.add('bg-green-600','text-white'); tabLogin.classList.remove('bg-gray-100','text-gray-700');
+                tabRegister.classList.add('bg-gray-100','text-gray-700'); tabRegister.classList.remove('bg-green-600','text-white');
+                loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+                loginError.textContent = ''; registerError.textContent = '';
+            });
 
-    document.addEventListener('DOMContentLoaded', ()=> {
-      const tabLogin = document.getElementById('tab-login');
-      const tabRegister = document.getElementById('tab-register');
-      const loginForm = document.getElementById('login-form');
-      const registerForm = document.getElementById('register-form');
-      const loginEmail = document.getElementById('login-email');
-      const loginPassword = document.getElementById('login-password');
-      const loginError = document.getElementById('login-error');
-      const registerEmail = document.getElementById('register-email');
-      const registerPassword = document.getElementById('register-password');
-      const registerError = document.getElementById('register-error');
-      const authStatus = document.getElementById('auth-status');
+            tabRegister.addEventListener('click', () => {
+                tabRegister.classList.add('bg-green-600','text-white'); tabRegister.classList.remove('bg-gray-100','text-gray-700');
+                tabLogin.classList.add('bg-gray-100','text-gray-700'); tabLogin.classList.remove('bg-green-600','text-white');
+                registerForm.classList.remove('hidden'); loginForm.classList.add('hidden');
+                loginError.textContent = ''; registerError.textContent = '';
+            });
 
-      if (getSession()) {
-        authStatus.textContent = 'Já autenticado. Redirecionando...';
-        setTimeout(()=> location.href = '/index.html', 400);
-        return;
-      }
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                loginError.textContent = '';
+                const email = loginEmail.value.trim().toLowerCase();
+                const pw = loginPassword.value;
+                if (!email || !pw) { loginError.textContent = 'Preencha e-mail e senha.'; return; }
+                const users = loadUsers();
+                if (!users[email]) { loginError.textContent = 'Usuário não encontrado.'; return; }
+                const h = await hashPassword(pw);
+                if (h !== users[email]) { loginError.textContent = 'Senha inválida.'; return; }
+                setSession(email);
+                authStatus.textContent = 'Login bem-sucedido. Redirecionando...';
+                setTimeout(()=> location.href = '/index.html', 300);
+            });
 
-      tabLogin.addEventListener('click', ()=>{
-        tabLogin.classList.add('bg-green-600','text-white'); tabLogin.classList.remove('bg-gray-100','text-gray-700');
-        tabRegister.classList.add('bg-gray-100','text-gray-700'); tabRegister.classList.remove('bg-green-600','text-white');
-        loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
-        loginError.textContent = ''; registerError.textContent = '';
-      });
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                registerError.textContent = '';
+                const email = registerEmail.value.trim().toLowerCase();
+                const password = registerPassword.value;
+                const passwordConfirm = document.getElementById('register-password-confirm').value;
+                if (!email || (password || '').length < 6) { registerError.textContent = 'E-mail e senha (mín 6) são necessários.'; return; }
+                if (password !== passwordConfirm) { registerError.textContent = 'As senhas não coincidem.'; return; }
+                const users = loadUsers();
+                if (users[email]) { registerError.textContent = 'E-mail já cadastrado.'; return; }
+                const h = await hashPassword(password);
+                users[email] = h;
+                saveUsers(users);
+                authStatus.textContent = 'Cadastro realizado com sucesso. Faça login.';
+                tabLogin.click();
+            });
 
-      tabRegister.addEventListener('click', ()=>{
-        tabRegister.classList.add('bg-green-600','text-white'); tabRegister.classList.remove('bg-gray-100','text-gray-700');
-        tabLogin.classList.add('bg-gray-100','text-gray-700'); tabLogin.classList.remove('bg-green-600','text-white');
-        registerForm.classList.remove('hidden'); loginForm.classList.add('hidden');
-        loginError.textContent = ''; registerError.textContent = '';
-      });
-
-      loginForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        loginError.textContent = '';
-        const email = loginEmail.value.trim().toLowerCase();
-        const pw = loginPassword.value;
-        if (!email || !pw) { loginError.textContent = 'Preencha e-mail e senha.'; return; }
-        const users = loadUsers();
-        if (!users[email]) { loginError.textContent = 'Usuário não encontrado.'; return; }
-        const h = await hashPassword(pw);
-        if (h !== users[email]) { loginError.textContent = 'Senha inválida.'; return; }
-        setSession(email);
-        authStatus.textContent = 'Login bem-sucedido. Redirecionando...';
-        setTimeout(()=> location.href = '/index.html', 300);
-      });
-
-      registerForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        registerError.textContent = '';
-        const email = registerEmail.value.trim().toLowerCase();
-        const pw = registerPassword.value;
-        if (!email || !pw || pw.length < 6) { registerError.textContent = 'E-mail e senha (mín.6) são obrigatórios.'; return; }
-        const users = loadUsers();
-        if (users[email]) { registerError.textContent = 'E-mail já cadastrado.'; return; }
-        const h = await hashPassword(pw);
-        users[email] = h;
-        saveUsers(users);
-        authStatus.textContent = 'Cadastro realizado com sucesso. Faça login.';
-        tabLogin.click();
-      });
-    });
-  </script>
+            // toggle mostrar/ocultar senhas
+            document.querySelectorAll('.toggle-password').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.dataset.target;
+                    const inp = document.getElementById(targetId);
+                    if (!inp) return;
+                    if (inp.type === 'password') {
+                        inp.type = 'text';
+                        btn.textContent = '🙈';
+                    } else {
+                        inp.type = 'password';
+                        btn.textContent = '👁️';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
