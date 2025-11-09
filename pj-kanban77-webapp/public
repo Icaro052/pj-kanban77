@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Kanban PCM</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script type="module" src="js/auth.js"></script>
+</head>
+<body class="antialiased text-gray-900 bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+        <h2 class="text-2xl font-semibold text-center mb-6">Login ou Cadastro</h2>
+        <form id="auth-form">
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Digite seu email">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
+                <input type="password" id="password" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Digite sua senha">
+            </div>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember-me" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">Lembrar de mim</label>
+                </div>
+                <a href="#" class="text-sm text-green-600 hover:underline">Esqueceu a senha?</a>
+            </div>
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-200">Entrar</button>
+        </form>
+        <div class="mt-4 text-center">
+            <span class="text-sm text-gray-600">Não tem uma conta? </span>
+            <button id="register-btn" class="text-green-600 hover:underline">Cadastre-se</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // Lógica de autenticação aqui
+        });
+
+        document.getElementById('register-btn').addEventListener('click', () => {
+            // Lógica para abrir o modal de registro ou redirecionar para a página de registro
+        });
+    </script>
+</body>
+</html>

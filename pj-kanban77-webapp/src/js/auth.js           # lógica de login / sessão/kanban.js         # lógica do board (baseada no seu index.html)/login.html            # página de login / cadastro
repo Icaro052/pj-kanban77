@@ -1,0 +1,41 @@
+// auth.js - lógica de login / sessão
+
+// Importa as funções do Firebase que carregamos no window
+const { initializeApp, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } = window.firebaseSDK;
+
+// Inicializa o Firebase Auth
+const auth = getAuth();
+
+// Função para registrar um novo usuário
+const registerUser = async (email, password) => {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('Usuário registrado:', userCredential.user);
+    } catch (error) {
+        console.error('Erro ao registrar usuário:', error);
+    }
+};
+
+// Função para fazer login de um usuário
+const loginUser = async (email, password) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log('Usuário logado:', userCredential.user);
+    } catch (error) {
+        console.error('Erro ao fazer login:', error);
+    }
+};
+
+// Função para monitorar o estado de autenticação
+const monitorAuthState = (callback) => {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            callback(user);
+        } else {
+            callback(null);
+        }
+    });
+};
+
+// Expondo as funções para uso em outros módulos
+export { registerUser, loginUser, monitorAuthState };
