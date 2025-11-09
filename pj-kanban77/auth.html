@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro e Login - Kanban PCM</title>
+    
+    <link rel="stylesheet" href="src/css/styles.css">
+    <script type="module" src="src/js/auth.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .form-container { max-width: 400px; margin: auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="antialiased text-gray-900">
+
+    <header class="bg-green-800 text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto max-w-full px-4 md:px-8 py-4">
+            <h1 class="text-2xl font-bold">Kanban PCM</h1>
+        </div>
+    </header>
+
+    <main class="flex items-center justify-center min-h-screen">
+        <div class="form-container">
+            <h2 class="text-xl font-semibold text-center mb-4">Cadastro e Login</h2>
+            <form id="auth-form">
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+                    <input type="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Digite seu e-mail">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
+                    <input type="password" id="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Digite sua senha">
+                </div>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-md">Entrar</button>
+                <button type="button" id="register-btn" class="w-full mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md">Cadastrar</button>
+            </form>
+            <div id="auth-status" class="mt-4 text-center text-sm text-gray-600"></div>
+        </div>
+    </main>
+
+</body>
+</html>
