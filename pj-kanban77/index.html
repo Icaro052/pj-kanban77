@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban PCM - Heineken</title>
+    
+    <link rel="stylesheet" href="src/css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script type="module" src="src/js/main.js"></script>
+</head>
+<body class="antialiased text-gray-900">
+
+    <!-- Cabeçalho (Tema Heineken PCM) -->
+    <header class="bg-green-800 text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto max-w-full px-4 md:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <h1 class="text-2xl font-bold">Kanban PCM</h1>
+                <p class="text-sm text-gray-200 font-light">Cervejaria Heineken</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="auth.html" class="bg-green-600 hover:bg-green-700 px-5 py-2 rounded-lg font-semibold shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-green-800">
+                    Login / Cadastro
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main id="kanban-board" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6">
+        <!-- Colunas do Kanban -->
+        <div class="kanban-column bg-white rounded-xl shadow-lg flex flex-col">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="font-semibold text-gray-800 uppercase text-sm tracking-wider">Solicitações / Backlog</h3>
+            </div>
+            <div id="col-restaurar" class="p-4 space-y-4 kanban-column-body flex-grow min-h-[200px]" data-column-id="col-restaurar"></div>
+        </div>
+        <!-- Outras colunas... -->
+    </main>
+
+    <script type="module" src="src/js/firebase-adapter.js"></script>
+</body>
+</html>
